@@ -1,0 +1,1 @@
+export const fileExtensionRegex = /\.(jpg|png|txt|json|xlsx|pdf|mp4|zip|py|exe|docx|jpeg|csv|sol|tmp|java|doc)$/i;
