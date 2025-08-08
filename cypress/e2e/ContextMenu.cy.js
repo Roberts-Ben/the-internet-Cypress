@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe('Context Menu', () => 
 {
     beforeEach(() => 

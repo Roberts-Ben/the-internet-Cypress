@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe('Add Remove Elements', () => 
 {
     beforeEach(() => 

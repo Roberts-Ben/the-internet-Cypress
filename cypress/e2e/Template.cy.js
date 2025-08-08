@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe('Template Test', () => 
 {
     beforeEach(() => 
