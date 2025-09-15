@@ -1,82 +1,73 @@
 /// <reference types="cypress" />
 
-describe('Add Remove Elements', () => 
-{
-    beforeEach(() => 
-    {
-        cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');
-        cy.url().should('eq', 'https://the-internet.herokuapp.com/add_remove_elements/');
+import { visit, getCurrentURL } from "../support/actions/BaseActions";
+import {addElement, getDeleteButtons } from "../support/actions/AddRemoveElementsActions";
+
+describe('Add Remove Elements', () => {
+    const URL = "https://the-internet.herokuapp.com/add_remove_elements/";
+
+    beforeEach(() => {
+        visit(URL);
+        getCurrentURL().should("eq", URL);
     });
     
-    it('verifyAddElement', () => 
-    {
-        AddElement();
+    it('verifyAddElement', () => {
+        addElement();
 
-        cy.get("button[onclick='deleteElement()']")
-        .should('be.visible');
+        getDeleteButtons().first().should('be.visible');
     });
 
-    it('verifyAddMultipleElement', () => 
-    {
+    it('verifyAddMultipleElement', () => {
         const elementsToAdd = 10;
 
         for(let i = 0; i < elementsToAdd; i++)
         {
-            AddElement();
+            addElement();
         }
        
-        cy.get("button[onclick='deleteElement()']")
-        .should('have.length', elementsToAdd)
+        getDeleteButtons().should('have.length', elementsToAdd)
     });
 
-    it('verifyDeleteElement', () => 
-    {
-        AddElement();
+    it('verifyDeleteElement', () => {
+        addElement();
 
-        cy.get("button[onclick='deleteElement()']")
-        .should('have.length', 1)
-        .first()
+        getDeleteButtons().should('have.length', 1)
+        
+        getDeleteButtons().first()
         .click()
 
-        cy.get("button[onclick='deleteElement()']")
-        .should('have.length', 0)
+        getDeleteButtons().should('have.length', 0)
     });
 
-    it('verifyDeleteAllElements', () => 
-    {
+    it('verifyDeleteAllElements', () => {
         const elementsToAdd = 10;
 
         for(let i = 0; i < elementsToAdd; i++)
         {
-            AddElement();
+            addElement();
         }
 
-        cy.get("button[onclick='deleteElement()']")
-        .should('have.length', elementsToAdd)
-        .each(($btn) => 
-        {
+        getDeleteButtons().should('have.length', elementsToAdd)
+        
+        getDeleteButtons().each(($btn) => {
             cy.wrap($btn).click();
         })
 
-         cy.get("button[onclick='deleteElement()']")
-            .should('have.length', 0)
+        getDeleteButtons().should('have.length', 0)
     });
 
-    it('verifyDeleteRandomElements', () => 
-    {
+    it('verifyDeleteRandomElements', () => {
         const elementsToAdd = 10;
         const elementsToDelete = 3;
 
         for(let i = 0; i < elementsToAdd; i++)
         {
-            AddElement();
+            addElement();
         }
 
         for (let i = 0; i < elementsToDelete; i++) 
         {
-            cy.get("button[onclick='deleteElement()']")
-            .then(($buttons) => 
-            {
+            getDeleteButtons().then(($buttons) => {
                 const count = $buttons.length;
                 expect(count).to.be.gte(elementsToAdd - i);
 
@@ -86,12 +77,6 @@ describe('Add Remove Elements', () =>
             });
         }
 
-        cy.get("button[onclick='deleteElement()']")
-            .should('have.length', elementsToAdd - elementsToDelete)
+        getDeleteButtons().should('have.length', elementsToAdd - elementsToDelete)
     });
-
-    const AddElement = () => 
-    {
-        cy.get("button[onclick='addElement()']").click();
-    };
 });

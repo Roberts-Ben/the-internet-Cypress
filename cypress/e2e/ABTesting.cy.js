@@ -1,30 +1,21 @@
 /// <reference types="cypress" />
 
-describe('AB Testing', () => 
-{
-    beforeEach(() => 
-    {
-        cy.visit("https://the-internet.herokuapp.com/abtest");
-        cy.url().should('eq', "https://the-internet.herokuapp.com/abtest");
+import { visit, getCurrentURL } from "../support/actions/BaseActions";
+import { getHeaderText } from "../support/actions/ABTestingActions";
+
+describe("A/B Testing Page", () => {
+    const URL = "https://the-internet.herokuapp.com/abtest";
+    const HEADER_A = "A/B Test Variation 1";
+    const HEADER_B = "A/B Test Control";
+
+    beforeEach(() => {
+        visit(URL);
+        getCurrentURL().should("eq", URL);
     });
-    
-    it('verifyAPage', () => 
-    {
-        const AHeader = "A/B Test Variation 1";
-        const BHeader = "A/B Test Control";
-        
-        cy.get('h3').then($header => 
-        {
-            const headerText = $header.text();
-            
-            if (headerText === AHeader) 
-            {
-                expect(headerText).to.equal(AHeader);
-            } 
-            else if (headerText === BHeader) 
-            {
-                expect(headerText).to.equal(BHeader);
-            }
+
+    it("verifyHeaderText", () => {
+        getHeaderText().then((headerText) => {
+        expect([HEADER_A, HEADER_B]).to.include(headerText.trim());
         });
     });
 });
